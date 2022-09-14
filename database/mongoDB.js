@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
+mongoose.connect('mongodb://localhost/reviews');
+mongoose.connect('mongodb://localhost/reviews/meta');
+
 const reviewsSchema = new Schema({
   product_id: Number,
   rating: Number,
@@ -60,4 +63,3 @@ const reviewsMetaSchema = new Schema({
 const Review = mongoose.model('Review', reviewsSchema);
 const ReviewMeta = mongoose.model('ReviewMeta', reviewsMetaSchema);
 
-mongoose.connect('mongodb://localhost:____');
