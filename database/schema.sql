@@ -14,20 +14,35 @@ CREATE TABLE reviews (
   reported BOOLEAN,
   reviewer_name text,
   reviewer_email text,
-  response text
+  response text,
+  product_id integer,
+  FOREIGN KEY (product_id)
+    REFERENCES products(id);
 );
 
 CREATE TABLE photos (
   id bigserial,
-  url text
+  url text,
+  review_id integer,
+  FOREIGN KEY (review_id)
+    REFERENCES reviews(id);
 );
 
 CREATE TABLE characteristics (
   id bigserial,
-  name text
+  product_id integer,
+  name text,
+  FOREIGN KEY (product_id)
+    REFERENCES products(id)
 );
 
 CREATE TABLE characteristic_reviews (
   id bigserial,
-  value integer
+  characteristic_id integer,
+  review_id integer,
+  value integer,
+  FOREIGN KEY (characteristic_id)
+    REFERENCES characteristics(id),
+  FOREIGN KEY (review_id)
+    REFERENCES reviews (id)
 );

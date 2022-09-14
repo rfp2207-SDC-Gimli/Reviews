@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
-mongoose.connect('mongodb://localhost/reviews');
+mongoose.connect('mongodb://localhost/reviews');  //not sure how to differentiate between these two endpoints************
 mongoose.connect('mongodb://localhost/reviews/meta');
 
 const reviewsSchema = new Schema({
