@@ -1,9 +1,15 @@
 const mongoose = require("mongoose");
-
 const { Schema } = mongoose;
 
-mongoose.connect('mongodb://localhost/reviews');  //not sure how to differentiate between these two endpoints************
-mongoose.connect('mongodb://localhost/reviews/meta');
+mongoose.connect('mongodb://localhost/reviews');
+
+const Review = mongoose.model('Review', reviewsSchema);
+const ReviewMeta = mongoose.model('ReviewMeta', reviewsMetaSchema);
+
+const photosSchema = new Schema ({
+  id: Number,
+  url: String
+})
 
 const reviewsSchema = new Schema({
   product_id: Number,
@@ -16,7 +22,9 @@ const reviewsSchema = new Schema({
   reviewer_name: String,
   reviewer_email: String,
   response: String,
-  photos: Array
+  photos: [
+    type: photosSchema
+  ]
 })
 
 const reviewsMetaSchema = new Schema({
@@ -60,6 +68,4 @@ const reviewsMetaSchema = new Schema({
   }
 })
 
-const Review = mongoose.model('Review', reviewsSchema);
-const ReviewMeta = mongoose.model('ReviewMeta', reviewsMetaSchema);
 
