@@ -8,18 +8,36 @@ app.use(express.json());
 
 //routes for the '/reviews' endpoint
 app.get('/reviews', (req, res) => {
-  const productID = req.query.product_id;
-  db.getReviewsByProductID(productID, (err, results) => {
+  const params = req.query;
+  const page = params.page || 0;
+  const count = params.count || 5;
+  const reviews = {
+    product: params.product_id,
+    page: page,
+    count: count,
+    results: [],
+  }
+  db.getReviewsByProductID(params, page, count, (err, results) => {
     if(err) {
       throw err
     } else {
-      res.json(results.rows);
+      reviews.results = results.rows;
+      res.json(reviews);
     }
   })
 })
 
 app.post('/reviews', (req, res) => {
-
+  let lastPhotoID;
+  db.getLastPhotoID((err, results) => {
+    if(err) {
+      throw err;
+    } else {
+      lastPhotoID = results.rows[0].photos[results.rows[0].photos.length - 1].id;
+      console.log(lastPhotoID);
+      res.sendStatus(201);
+    }
+  })
 });
 
 app.put('/reviews', (req, res) => {
