@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-mongoose.connect('mongodb://localhost/reviews');
+// mongoose.connect('mongodb://localhost/reviews');
 
 const Review = mongoose.model('Review', reviewsSchema);
 const ReviewMeta = mongoose.model('ReviewMeta', reviewsMetaSchema);
