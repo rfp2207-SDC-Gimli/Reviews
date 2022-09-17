@@ -117,6 +117,15 @@ SELECT review_id, json_agg(JSON_BUILD_OBJECT('id', photos.id, 'url', photos.url)
 SELECT product_id, json_object_agg(ratings.stars, ratings.value) FROM products JOIN ratings ON products.id = ratings.product_id GROUP BY product_id LIMIT 20;
 
 
+--Query to get a single product's rating meta data;
+SELECT json_object_agg(ratings.stars, ratings.value order by ratings.stars) from ratings WHERE product_id = 2;
+
+--Query to get a single product's recommended meta data;
+SELECT json_object_agg(recommended.recommends, recommended.value) from recommended WHERE product_id = 2;
+
+--Query to get a single product's characteristics meta data;
+SELECT json_build_object(characteristics_meta.characteristic, json_build_object('id', characteristics_meta.id, 'value', characteristics_meta.value)) from characteristics_meta WHERE product_id = 4;
+
 --Query to get the last set of photos in the database
 SELECT photos FROM reviews WHERE photos IS NOT NULL ORDER BY id DESC LIMIT 1; --Get last id by selecting (array.length-1)[id]
 

@@ -27,32 +27,81 @@ app.get('/reviews', (req, res) => {
   })
 })
 
+app.get('/reviews/meta', (req, res) => {
+  const params = req.query;
+  const reviewsMeta = {
+    product_id: params.product_id,
+    ratings: '',
+    recommended: '',
+    characteristics: '',
+  }
+
+  db.getRatingsMetaData(params, (err, results) => {
+    if(err) {
+      throw err
+    } else {
+      reviewsMeta.ratings = results.rows[0].ratings;
+      console.log("Got reviews data");
+      db.getRecommendedMetaData(params, (err, results) => {
+        if(err) {
+          throw (err);
+        } else {
+          reviewsMeta.recommended = results.rows[0].recommended;
+          console.log("got recommended data");
+          db.getCharacteristicsMetaData(params, (err, results) => {
+            if(err) {
+              throw err;
+            } else {
+              const resultsArray = results.rows;
+              const charObject = {};
+              resultsArray.forEach((row) => {
+                for (var key in row.json_build_object) {
+                  charObject[key] = row.json_build_object[key];
+                }
+              });
+              reviewsMeta.characteristics = charObject;
+              // reviewsMeta.characteristics = results.rows;
+              res.json(reviewsMeta)
+            }
+          })
+        }
+      })
+    }
+  })
+})
+
+
 app.post('/reviews', (req, res) => {
+  params = req.query; //{product_id, rating, summary, body, recommend, gracie, email, photos, characteristic}
   let lastPhotoID;
+  let date = Date.now();
   db.getLastPhotoID((err, results) => {
     if(err) {
       throw err;
     } else {
       lastPhotoID = results.rows[0].photos[results.rows[0].photos.length - 1].id;
-      console.log(lastPhotoID);
-      res.sendStatus(201);
+      console.log('Got last photo ID');
+      db.postReview(params, lastPhotoID, date, (err, results) => {
+        if(err) {
+          throw err;
+        } else {
+          console.log('posted new review to reviews table');
+          db.postReviewMeta(params, (err, results) => {
+            if(err) {
+              throw err;
+            } else {
+              console.log('Added new review to review meta data');
+              res.sendStatus(201);
+            }
+          })
+        }
+      })
     }
   })
 });
 
-app.put('/reviews', (req, res) => {
-
-});
-
-app.delete('/reviews', (req, res) => {
-
-});
-
-
 //routes for the '/reviews/meta' endpoint
-app.get('/reviews/meta', (req, res) => {
 
-});
 
 app.post('/reviews/meta', (req, res) => {
 

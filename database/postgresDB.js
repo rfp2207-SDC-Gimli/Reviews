@@ -16,19 +16,19 @@ module.exports = {
 
   getReviewsByProductID: function(params, page, count, callback) {
     if(!params.sort) {
-      pool.query(`SELECT id, rating, summary, recommend, response, body, date, reviewer_name, helpfulness, photos FROM reviews WHERE product_id=${params.product_id} AND reported=false ORDER BY id OFFSET ${page * count} ROWS FETCH NEXT ${count} ROWS ONLY;`, (err, response) => {
+      pool.query(`SELECT id AS review_id, rating, summary, recommend, response, body, to_timestamp(date/1000) AS date, reviewer_name, helpfulness, photos FROM reviews WHERE product_id=${params.product_id} AND reported=false ORDER BY id OFFSET ${page * count} ROWS FETCH NEXT ${count} ROWS ONLY;`, (err, response) => {
         callback(err, response);
       })
     } else if(params.sort === "newest") {
-      pool.query(`SELECT id, rating, date, summary, body, recommend, response, reviewer_name, helpfulness, photos FROM reviews WHERE product_id=${params.product_id} AND reported=false ORDER BY date DESC OFFSET ${page * count} ROWS FETCH NEXT ${count} ROWS ONLY;`, (err, response) => {
+      pool.query(`SELECT id AS review_id, rating, summary, recommend, response, body, to_timestamp(date/1000) AS date, reviewer_name, helpfulness, photos FROM reviews WHERE product_id=${params.product_id} AND reported=false ORDER BY date DESC OFFSET ${page * count} ROWS FETCH NEXT ${count} ROWS ONLY;`, (err, response) => {
         callback(err, response);
       })
     } else if (params.sort === "helpful") {
-      pool.query(`SELECT id, rating, date, summary, body, recommend, response, reviewer_name, helpfulness, photos FROM reviews WHERE product_id=${params.product_id} AND reported=false ORDER BY helpfulness DESC OFFSET ${page * count} ROWS FETCH NEXT ${count} ROWS ONLY;`, (err, response) => {
+      pool.query(`SELECT id AS review_id, rating, summary, recommend, response, body, to_timestamp(date/1000) AS date, reviewer_name, helpfulness, photos FROM reviews WHERE product_id=${params.product_id} AND reported=false ORDER BY helpfulness DESC OFFSET ${page * count} ROWS FETCH NEXT ${count} ROWS ONLY;`, (err, response) => {
         callback(err, response);
       })
     } else if (params.sort === "relevant") {
-      pool.query(`SELECT id, rating, date, summary, body, recommend, response, reviewer_name, helpfulness, photos FROM reviews WHERE product_id=${params.product_id} AND reported=false ORDER BY rating DESC OFFSET ${page * count} ROWS FETCH NEXT ${count} ROWS ONLY;`, (err, response) => {
+      pool.query(`SELECT id AS review_id, rating, summary, recommend, response, body, to_timestamp(date/1000) AS date, reviewer_name, helpfulness, photos FROM reviews WHERE product_id=${params.product_id} AND reported=false ORDER BY rating DESC OFFSET ${page * count} ROWS FETCH NEXT ${count} ROWS ONLY;`, (err, response) => {
         callback(err, response)
       })
     }
@@ -41,7 +41,30 @@ module.exports = {
     })
   },
 
+  postReview: function(params, lastPhotoID, callback) {
+    pool.query(``, (err, response) => {
+      callback(err, response);
+    })
+  },
 
+  getRatingsMetaData: function(params, callback) {
+    pool.query(`SELECT json_object_agg(ratings.stars, ratings.value order by ratings.stars) AS ratings from ratings WHERE product_id = ${params.product_id};`, (err, response) => {
+      callback(err, response);
+    })
+  },
+
+  getRecommendedMetaData: function(params, callback) {
+    pool.query(`SELECT json_object_agg(recommended.recommends, recommended.value) AS recommended from recommended WHERE product_id = ${params.product_id};`, (err, response) => {
+      callback(err, response);
+    })
+  },
+
+  getCharacteristicsMetaData: function(params, callback) {
+    pool.query(`SELECT json_build_object(characteristics_meta.characteristic, json_build_object('id', characteristics_meta.id, 'value', characteristics_meta.value)) from characteristics_meta WHERE product_id = ${params.product_id};`, (err, response) => {
+      console.log(response.rows)
+      callback(err, response);
+    })
+  },
 
 
 
