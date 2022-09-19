@@ -79,8 +79,8 @@ app.post('/reviews', (req, res) => {
   if(photos) {
     db.getLastPhotoID((err, results) => {
       if(err) {
-        throw err
         console.log("error getting last photoID");
+        throw err
       } else {
         lastPhotoID = results.rows[0].photos[results.rows[0].photos.length - 1].id;
         photos.forEach((photoURL) => {
@@ -92,41 +92,76 @@ app.post('/reviews', (req, res) => {
         })
         db.postReview(params, photosArray, date, (err, results) => {
           if(err) {
-            throw err
             console.log("error posting review");
-          } else {
-            console.log('posted new review to reviews table');
+            throw err
+          }  else {
+            db.updateRatings(params, (err, results) => {
+              if (err) {
+                throw err
+                console.log('error updating ratings meta table')
+              } else {
+                db.updateRecommends(params, (err, results) => {
+                  if (err) {
+                    throw err
+                    console.log('error updating recommended meta table')
+                  } else {
+                    if(params.characteristics) {
+                      db.updateCharacteristics(params, (err, results) => {
+                        if (err) {
+                          console.log('error updating characteristics meta table')
+                        } else {
+                          console.log("posting review complete");
+                          res.sendStatus(201);
+                        }
+                        })
+                    } else {
+                      console.log("posting review complete!");
+                      res.sendStatus(201);
+                    }
+                  }
+                })
+              }
+            })
           }
          })
       }
       });
-    }
-      db.updateRatings(params, (err, results) => {
-        if (err) {
+    } else {
+      db.postReview(params, photosArray, date, (err, results) => {
+        if(err) {
+          console.log("error posting review");
           throw err
-          console.log('error updating ratings meta table')
         } else {
-          console.log('updated ratings')
-        }
-      })
-      db.updateRecommends(params, (err, results) => {
-        if (err) {
-          throw err
-          console.log('error updating recommended meta table')
-        } else {
-          console.log('updated recommended')
-        }
-      })
-      if(params.characteristics) {
-        db.updateCharacteristics(params, (err, results) => {
-          if (err) {
-            console.log('error updating characteristics meta table')
-          } else {
-            console.log('updated characteristics')
-          }
+          db.updateRatings(params, (err, results) => {
+            if (err) {
+              throw err
+              console.log('error updating ratings meta table')
+            } else {
+              db.updateRecommends(params, (err, results) => {
+                if (err) {
+                  throw err
+                  console.log('error updating recommended meta table')
+                } else {
+                  if(params.characteristics) {
+                    db.updateCharacteristics(params, (err, results) => {
+                      if (err) {
+                        console.log('error updating characteristics meta table')
+                      } else {
+                        console.log("posting review complete");
+                        res.sendStatus(201);
+                      }
+                      })
+                  } else {
+                    console.log("posting review complete!")
+                    res.sendStatus(201);
+                  }
+                }
+              })
+            }
           })
-      }
-      res.sendStatus(201);
+        }
+       })
+    }
 });
 
 //routes for the '/reviews/meta' endpoint

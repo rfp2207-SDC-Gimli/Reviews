@@ -62,17 +62,7 @@ module.exports = {
   },
 
   postReview: function(params, photosArray, date, callback) {
-    console.log("product_id", params.product_id);
-    console.log("rating", params.rating);
-    console.log("date", date);
-    console.log("summary", params.summary);
-    console.log("body", params.body);
-    console.log("recommend", params.recommend);
-    console.log("name", params.name);
-    console.log("email", params.email);
-    console.log("photos", photosArray);
-
-    if (photosArray) {
+    if (photosArray && photosArray.length > 0) {
       pool.query(`INSERT INTO reviews (product_id, rating, date, summary, body, recommend, reported, reviewer_name, reviewer_email, helpfulness, photos) VALUES ('${params.product_id}', '${params.rating}', '${date}', '${params.summary}', '${params.body}', '${params.recommend}', DEFAULT, '${params.name}', '${params.email}', DEFAULT, '${JSON.stringify(photosArray)}');`, (err, response) => {
         if (err) {
           callback(err, null);
@@ -81,7 +71,7 @@ module.exports = {
         }
       })
     } else {
-      pool.query(`INSERT INTO reviews (product_id, rating, date, summary, body, recommend, reported, reviewer_name, reviewer_email, helpfulness) VALUES ('${params.product_id}', '${params.rating}', '${date}', '${params.summary}', '${params.body}', '${params.recommend}', DEFAULT, '${params.name}', 'to_json(${params.email})', DEFAULT);`, (err, response) => {
+      pool.query(`INSERT INTO reviews (product_id, rating, date, summary, body, recommend, reported, reviewer_name, reviewer_email, helpfulness) VALUES ('${params.product_id}', '${params.rating}', '${date}', '${params.summary}', '${params.body}', '${params.recommend}', DEFAULT, '${params.name}', '${params.email}', DEFAULT);`, (err, response) => {
         if (err) {
           callback(err, null);
         } else {
@@ -92,7 +82,7 @@ module.exports = {
   },
 
   updateRatings: function(params, callback) {
-    pool.query(`UPDATE ratings SET value = value + 1 WHERE (product_id = ${params.product_id} AND stars = ${params.rating});`, (err, response) => {  //How would I set it if there is not a rating for that star yet?
+    pool.query(`UPDATE ratings SET value = value + 1 WHERE (product_id = ${params.product_id} AND stars = ${params.rating});`, (err, response) => {
       if (err) {
         callback(err, null);
       } else {
@@ -102,7 +92,7 @@ module.exports = {
   },
 
   updateRecommends: function(params, callback) {
-    pool.query(`UPDATE recommended SET value = (value + 1) WHERE (product_id = ${params.product_id} AND recommends = ${params.recommend});`, (err, response) => {  //same problem as above
+    pool.query(`UPDATE recommended SET value = (value + 1) WHERE (product_id = ${params.product_id} AND recommends = ${params.recommend});`, (err, response) => {
       if (err) {
         callback(err, null);
       } else {
@@ -111,7 +101,7 @@ module.exports = {
     })
   },
 
-  updateCharacteristics: function(params, callback) {  //*********************** invoking a query inside of a for loop (possible errors?)
+  updateCharacteristics: function(params, callback) {
     characteristics = params.characteristics;
     for (charID in characteristics) {
       pool.query(`SELECT * FROM characteristics_meta WHERE product_id = ${params.product_id};`, (err, selectResponse) => {
