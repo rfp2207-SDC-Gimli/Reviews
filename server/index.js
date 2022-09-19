@@ -70,49 +70,86 @@ app.get('/reviews/meta', (req, res) => {
   })
 })
 
-
 app.post('/reviews', (req, res) => {
-  params = req.query; //{product_id, rating, summary, body, recommend, gracie, email, photos, characteristic}
+  params = req.body; //{product_id, rating, summary, body, recommend, gracie, email, photos, characteristic}
   let lastPhotoID;
   let date = Date.now();
-  db.getLastPhotoID((err, results) => {
+  let photosArray = [];
+  let photos = params.photos;
+  if(photos) {
+    db.getLastPhotoID((err, results) => {
+      if(err) {
+        throw err
+        console.log("error getting last photoID");
+      } else {
+        lastPhotoID = results.rows[0].photos[results.rows[0].photos.length - 1].id;
+        photos.forEach((photoURL) => {
+          photoObject = {};
+          photoObject.id = lastPhotoID.toString();
+          photoObject.url = photoURL;
+          photosArray.push(photoObject);
+          lastPhotoID++;
+        })
+        db.postReview(params, photosArray, date, (err, results) => {
+          if(err) {
+            throw err
+            console.log("error posting review");
+          } else {
+            console.log('posted new review to reviews table');
+          }
+         })
+      }
+      });
+    }
+      db.updateRatings(params, (err, results) => {
+        if (err) {
+          throw err
+          console.log('error updating ratings meta table')
+        } else {
+          console.log('updated ratings')
+        }
+      })
+      db.updateRecommends(params, (err, results) => {
+        if (err) {
+          throw err
+          console.log('error updating recommended meta table')
+        } else {
+          console.log('updated recommended')
+        }
+      })
+      if(params.characteristics) {
+        db.updateCharacteristics(params, (err, results) => {
+          if (err) {
+            console.log('error updating characteristics meta table')
+          } else {
+            console.log('updated characteristics')
+          }
+          })
+      }
+      res.sendStatus(201);
+});
+
+//routes for the '/reviews/meta' endpoint
+app.put('/reviews/:review_id/helpful', (req, res) => {
+  const review_id = req.params.review_id;
+  db.updateHelpfulness(review_id, (err, results) => {
     if(err) {
       throw err;
     } else {
-      lastPhotoID = results.rows[0].photos[results.rows[0].photos.length - 1].id;
-      console.log('Got last photo ID');
-      db.postReview(params, lastPhotoID, date, (err, results) => {
-        if(err) {
-          throw err;
-        } else {
-          console.log('posted new review to reviews table');
-          db.postReviewMeta(params, (err, results) => {
-            if(err) {
-              throw err;
-            } else {
-              console.log('Added new review to review meta data');
-              res.sendStatus(201);
-            }
-          })
-        }
-      })
+      res.sendStatus(204);
     }
   })
 });
 
-//routes for the '/reviews/meta' endpoint
-
-
-app.post('/reviews/meta', (req, res) => {
-
-});
-
-app.put('/reviews/meta', (req, res) => {
-
-});
-
-app.delete('/reviews/meta', (req, res) => {
-
+app.put('/reviews/:review_id/report', (req, res) => {
+  const review_id = req.params.review_id;
+  db.updateReported(review_id, (err, results) => {
+    if(err) {
+      throw err;
+    } else {
+      res.sendStatus(204);
+    }
+  })
 });
 
 
