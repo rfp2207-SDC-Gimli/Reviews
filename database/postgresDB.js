@@ -104,7 +104,7 @@ module.exports = {
   updateCharacteristics: function(params, callback) {
     characteristics = params.characteristics;
     for (charID in characteristics) {
-      pool.query(`SELECT * FROM characteristics_meta WHERE product_id = ${params.product_id};`, (err, selectResponse) => {
+      pool.query(`SELECT * FROM characteristics_meta WHERE characteristic_id = ${charID};`, (err, selectResponse) => {
         if(err) {
           throw err;
         } else if (selectResponse.rows.count > 0) {
@@ -117,7 +117,7 @@ module.exports = {
             }
           })
         } else {
-          pool.query(`UPDATE characteristics_meta SET value = ${characteristics[charID]}, sum = ${characteristics[charID]}, count = 1;`, (err, secondResponse) => {
+          pool.query(`UPDATE characteristics_meta SET value = ${characteristics[charID]}, sum = ${characteristics[charID]}, count = 1 WHERE characteristic_id = ${charID};`, (err, secondResponse) => {
             if (err) {
               callback(err, null);
             } else {
