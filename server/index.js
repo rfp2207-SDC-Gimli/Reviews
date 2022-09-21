@@ -9,7 +9,7 @@ app.use(express.json());
 app.get('/loaderio-81f1611dd826ba094dc2079fe42ee64a', (req, res) => 
   res.send('loaderio-81f1611dd826ba094dc2079fe42ee64a')
 );
-loaderio-81f1611dd826ba094dc2079fe42ee64a;
+
 //routes for the '/reviews' endpoint
 app.get('/reviews', (req, res) => {
   const params = req.query;
