@@ -25,11 +25,11 @@ export default function () {
 
   const BASE_URL = 'http://localhost:3000/reviews';
 
-  const res = http.get(`${BASE_URL}?product_id=${id}`)
+  // const res = http.get(`${BASE_URL}?product_id=${id}`)
   const res2 = http.get(`${BASE_URL}/meta?product_id=${id}`)
-  check(res, {
-    'is status 200': (r) => r.status === 200,
-  });
+  // check(res, {
+  //   'is status 200': (r) => r.status === 200,
+  // });
   check(res2, {
     'is status 200': (r) => r.status === 200,
   });

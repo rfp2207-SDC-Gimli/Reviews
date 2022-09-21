@@ -1,18 +1,18 @@
-const Pool = require('pg').Pool
+const { Pool } = require('pg')
 require("dotenv").config();
 
 
 const pool = new Pool({
   user: process.env.DB_USER,
-  host: 'localhost',
+  host: process.env.DB_HOST,
   database: process.env.DB_NAME,
-  password: '',
+  password: process.env.DB_PASS,
   port: process.env.DB_PORT
-})
+});
 // pool.connect();
 
-module.exports = {
 
+module.exports = {
 //Query to get all reviews by ID
   getReviewsByProductID: function(params, page, count, callback) {
     if(!params.sort) {
@@ -33,6 +33,7 @@ module.exports = {
       })
     }
   },
+
 
   //Queries for getting meta data...
   getRatingsMetaData: function(params, callback) {

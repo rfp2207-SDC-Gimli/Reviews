@@ -61,6 +61,10 @@ UPDATE reviews_2 SET photos = test.test_column FROM test WHERE reviews_2.id = te
 SELECT setval('reviews_id_seq', (SELECT MAX(id) FROM reviews)+1);
 
 
-scp -i "Gimli-SDC.pem" reviews.csv "ubuntu@ec2-54-177-198-89.us-west-1.compute.amazonaws.com":~/.
+scp -i "Gimli-SDC.pem" /Users/graciefogarty/Desktop/HackReactorSEI/Reviews/SDCReviews.pgsql "ubuntu@ec2-52-53-228-135.us-west-1.compute.amazonaws.com":~/.
 
+
+
+
+pg_dump -U graciefogarty -f SDCReviews.pgsql -C reviews
 -- To connect to the database run > psql postgres \c reviews

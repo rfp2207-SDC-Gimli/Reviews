@@ -95,6 +95,7 @@ CREATE TABLE recommended_options (
 
 \COPY characteristic_reviews(id, characteristic_id, review_id, value) FROM '/Users/graciefogarty/Desktop/HackReactorSEI/Reviews/data/characteristic_reviews.csv' DELIMITER ',' CSV HEADER;
 
+
 CREATE INDEX productID_idx ON reviews (product_id);
 CREATE INDEX charID_idx ON characteristics_meta (characteristic_id);
 CREATE INDEX ratings_prodID_idx ON ratings (product_id);

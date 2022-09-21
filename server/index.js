@@ -6,6 +6,7 @@ const db = require('../database/postgresDB.js');
 
 app.use(express.json());
 
+
 //routes for the '/reviews' endpoint
 app.get('/reviews', (req, res) => {
   const params = req.query;
@@ -69,6 +70,7 @@ app.get('/reviews/meta', (req, res) => {
     }
   })
 })
+
 
 app.post('/reviews', (req, res) => {
   params = req.body; //{product_id, rating, summary, body, recommend, gracie, email, photos, characteristic}
@@ -186,7 +188,6 @@ app.put('/reviews/:review_id/report', (req, res) => {
     }
   })
 });
-
 
 
 
