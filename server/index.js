@@ -6,8 +6,8 @@ const db = require('../database/postgresDB.js');
 
 app.use(express.json());
 
-app.get('/loaderio-81f1611dd826ba094dc2079fe42ee64a', (req, res) => 
-  res.send('loaderio-81f1611dd826ba094dc2079fe42ee64a')
+app.get('/loaderio-ac4783ebd9429a83e622e2e7190c3cf0', (req, res) => 
+  res.send('loaderio-ac4783ebd9429a83e622e2e7190c3cf0')
 );
 
 //routes for the '/reviews' endpoint
