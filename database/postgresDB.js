@@ -50,7 +50,6 @@ module.exports = {
 
   getCharacteristicsMetaData: function(params, callback) {
     pool.query(`SELECT json_build_object(characteristics_meta.characteristic, json_build_object('id', characteristics_meta.id, 'value', characteristics_meta.value)) from characteristics_meta WHERE product_id = ${params.product_id};`, (err, response) => {
-      console.log(response.rows)
       callback(err, response);
     })
   },
@@ -110,7 +109,7 @@ module.exports = {
           throw err;
         } else if (selectResponse.rows.count > 0) {
           pool.query(`UPDATE characteristics_meta SET value = (sum + ${characteristics[charID]}) / (count + 1), sum = sum + ${characteristics[charID]}, count = count + 1 WHERE characteristic_id = ${charID};`, (err, firstResponse) => {
-            console.log('ERROR UPDATING CHARACTERISTICS');
+           
             if (err) {
               callback(err, null);
             } else {

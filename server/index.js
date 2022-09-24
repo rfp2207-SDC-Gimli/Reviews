@@ -6,6 +6,9 @@ const db = require('../database/postgresDB.js');
 
 app.use(express.json());
 
+app.get('/loaderio-43b029a42339095d308d4a4d935071bb', (req, res) => 
+  res.send('loaderio-43b029a42339095d308d4a4d935071bb')
+);
 
 //routes for the '/reviews' endpoint
 app.get('/reviews', (req, res) => {
@@ -42,13 +45,11 @@ app.get('/reviews/meta', (req, res) => {
       throw err
     } else {
       reviewsMeta.ratings = results.rows[0].ratings;
-      console.log("Got reviews data");
       db.getRecommendedMetaData(params, (err, results) => {
         if(err) {
           throw (err);
         } else {
           reviewsMeta.recommended = results.rows[0].recommended;
-          console.log("got recommended data");
           db.getCharacteristicsMetaData(params, (err, results) => {
             if(err) {
               throw err;
@@ -149,12 +150,10 @@ app.post('/reviews', (req, res) => {
                       if (err) {
                         console.log('error updating characteristics meta table')
                       } else {
-                        console.log("posting review complete");
                         res.sendStatus(201);
                       }
                       })
                   } else {
-                    console.log("posting review complete!")
                     res.sendStatus(201);
                   }
                 }
