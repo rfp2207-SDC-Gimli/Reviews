@@ -87,7 +87,7 @@ app.post('/reviews', (req, res) => {
         lastPhotoID = results.rows[0].photos[results.rows[0].photos.length - 1].id;
         photos.forEach((photoURL) => {
           photoObject = {};
-          photoObject.id = lastPhotoID.toString();
+          photoObject.id = lastPhotoID;
           photoObject.url = photoURL;
           photosArray.push(photoObject);
           lastPhotoID++;
