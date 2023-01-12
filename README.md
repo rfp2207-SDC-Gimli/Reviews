@@ -47,7 +47,7 @@ To get my latency speed even lower, I evaluated where my testing client (Loader.
 | 1,000 rps |   1ms    |   0%      |
 
 ### Final Result
-Increased throughput to 5,000 rps.
+Increased throughput to 6,000 rps.
 | Throughput|  Latency  | Error rate|
 |-----------|-----------|-----------|
 | 6,000 rps |    3ms    |     0%    |
