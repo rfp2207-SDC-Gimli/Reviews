@@ -23,7 +23,7 @@ Deployed the server and database to AWS, I used a EC2 T2 micro instance for my s
 | 1,000 rps |  83ms     |    0%     |
 
 ### Load Balancer
-I scaled horizontally and deployed another server. Then, I used Nginx as my load balancer. Interestingly this increased mt error rate, so I needed to do further research and optimization.
+I scaled horizontally and deployed another server. Then, I used Nginx as my load balancer. Interestingly this increased my error rate, so I needed to do further research and optimization.
 | Throughput|  Latency  | Error rate|
 |-----------|-----------|-----------|
 | 1,000 rps |   243ms   |     51%   |
