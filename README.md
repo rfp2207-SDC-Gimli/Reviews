@@ -1,5 +1,5 @@
 # E-commerce System Design
-Inherited a front-end e-commerce application. In this project I built and optimized a back-end API for an e-commerce application. I worked with over 12 million data entries regarding reviews for products.
+Inherited a front-end e-commerce application, and built and optimized the backend API to store and serve the reviews data for the products on the website. I worked with over 12 million data entries regarding reviews for products.
 ## Tech Stack
 ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white) ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white) ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB) ![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white) ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 ### Testing
